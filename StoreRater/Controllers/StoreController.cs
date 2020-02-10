@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Web;
 using System.Web.Mvc;
 
@@ -34,6 +35,32 @@ namespace StoreRater.Controllers
                 return RedirectToAction("Index");
             }
             return View(store);
+        }
+        //GET: Store/Delete/(id)
+
+        public ActionResult Delete(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Store store = _db.Stores.Find(id);
+            if (store == null)
+            {
+                return HttpNotFound();
+            }
+            return View(store);
+
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+
+        public ActionResult Delete(int id)
+        {
+            Store store = _db.Stores.Find(id);
+            _db.Stores.Remove(store);
+            _db.SaveChanges();
+            return RedirectToAction("Index");
 
         }
     }
