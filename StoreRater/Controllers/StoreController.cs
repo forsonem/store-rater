@@ -15,5 +15,26 @@ namespace StoreRater.Controllers
         {
             return View(_db.Stores.ToList());
         }
+
+        //GET: Store/Create
+
+        public ActionResult Create()
+        {
+            return View();
+        }
+        //POST: store/create
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Create(Store store)
+        {
+            if (ModelState.IsValid)
+            {
+                _db.Stores.Add(store);
+                _db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            return View(store);
+
+        }
     }
 }
