@@ -1,6 +1,7 @@
 ﻿using StoreRater.Models;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Net;
 using System.Web;
@@ -62,6 +63,46 @@ namespace StoreRater.Controllers
             _db.SaveChanges();
             return RedirectToAction("Index");
 
+        }
+
+        //GET: Store/Edit?(id)
+        //Get an id form the user
+        // find a store by the id
+        //exceptions of the id is null
+        //exception if store does not exist
+        //of it does exist the return the store and the view
+
+        public ActionResult Edit(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Store store = _db.Stores.Find(id);
+            if (store == null)
+            {
+                return HttpNotFound();
+            }
+            return View(store);
+
+        }
+
+        //POST: Store/Edit/(id)
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+
+        public ActionResult Edit(Store store)
+        {
+            
+            if (ModelState.IsValid)
+            {
+                _db.Entry(store).State = EntityState.Modified;
+                _db.SaveChanges();
+                return RedirectToAction("Index");
+
+            }
+            return View(store);
         }
     }
 }
