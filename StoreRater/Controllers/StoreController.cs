@@ -104,5 +104,23 @@ namespace StoreRater.Controllers
             }
             return View(store);
         }
+
+        //GET: Store/Details/(id)
+        //This could possibly be refactored as we have used the same code three times in this controller.
+
+        public ActionResult Details(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Store store = _db.Stores.Find(id);
+            if (store == null)
+            {
+                return HttpNotFound();
+            }
+            return View(store);
+
+        }
     }
 }
